@@ -87,9 +87,19 @@ class RequestAccount extends Component {
           radiologist: state.form.value.radiologist,
         }),
       })
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({request: true});
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            this.setState({request: true});
+          });
+        } else {
+          response.json().then((data) => {
+            if (data.error) {
+              console.error(data.error);
+              this.setState({request: true});
+            }
+          });
+        }
       })
       .catch((error) => {
         console.error(error);

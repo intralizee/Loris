@@ -57,12 +57,7 @@ class Signup extends \NDB_Page implements ETagCalculator
             );
         }
         // request - account request by user.
-        $response           = $this->requestAccount($request);
-        $response['status'] = 'success';
-
-        return new \LORIS\Http\Response\JsonResponse(
-            $response
-        );
+        return $this->requestAccount($request);
     }
 
     /**
@@ -70,9 +65,9 @@ class Signup extends \NDB_Page implements ETagCalculator
      *
      * @param ServerRequestInterface $request The incoming PSR7 request.
      *
-     * @return array
+     * @return ResponseInterface The outgoing PSR7 response
      */
-    function requestAccount(ServerRequestInterface $request) : array
+    function requestAccount(ServerRequestInterface $request) : ResponseInterface
     {
         // Parse POST request body.
         $values = json_decode((string) $request->getBody(), true);
@@ -88,8 +83,9 @@ class Signup extends \NDB_Page implements ETagCalculator
                 $_SERVER['REMOTE_ADDR']
             );
             if (!$resp->isSuccess()) {
-                $values['error'] = 'Please complete the reCaptcha!';
-                return $values;
+                return new \LORIS\Http\Response\JSON\Conflict(
+                    'Please complete the reCaptcha!'
+                );
             }
         }
 
@@ -186,8 +182,6 @@ class Signup extends \NDB_Page implements ETagCalculator
                 }
             }
         }
-        // Show success message even if email already exists for security reasons
-        $values['success'] = true;
 
         // Don't send out emails if this is a sandbox VM.
         if (!$factory->config()->settingEnabled('sandbox')) {
@@ -235,7 +229,10 @@ class Signup extends \NDB_Page implements ETagCalculator
                 );
             }
         }
-        return $values;
+
+        return new \LORIS\Http\Response\JsonResponse(
+            $values
+        );
     }
 
     /**
