@@ -126,27 +126,35 @@ class Login extends Component {
           password: state.form.value.password,
         }),
       })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.expired) {
-          // expired - password expired.
-          const state = JSON.parse(JSON.stringify(this.state));
-          state.component.expiredPassword = {
-            message: data.error,
-            username: state.form.value.username,
-          };
-          state.mode = 'expired';
-          this.setState(state);
-        }
-        if (data.error) {
-          // error - incorrect password.
-          const state = JSON.parse(JSON.stringify(this.state));
-          state.form.error.toggle = true;
-          state.form.error.message = data.error;
-          this.setState(state);
-        } else if (data.status === 'success') {
-          // success - refresh page and user is logged in.
-          window.location.href = window.location.origin;
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            console.log(1);
+            console.log(data);
+            // success - refresh page and user is logged in.
+            window.location.href = window.location.origin;
+          });
+        } else {
+          console.log(2);
+          response.json().then((data) => {
+            console.log(data);
+            if (data.error) {
+              const state = JSON.parse(JSON.stringify(this.state));
+              if (data.error === 'password expired') {
+                // password expired
+                state.component.expiredPassword = {
+                  message: 'Password expired for user.',
+                  username: state.form.value.username,
+                };
+                state.mode = 'expired';
+              } else {
+                // incorrect password
+                state.form.error.toggle = true;
+                state.form.error.message = data.error;
+              }
+              this.setState(state);
+            }
+          });
         }
       })
       .catch((error) => {

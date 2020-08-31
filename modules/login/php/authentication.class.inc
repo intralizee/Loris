@@ -81,7 +81,7 @@ class Authentication extends \NDB_Page implements ETagCalculator
             );
         } else if ($values['command'] === 'login') {
             // login - user attempting to login.
-            $response = $this->login($request);
+            return $this->login($request);
         } else if ($values['command'] === 'expired') {
             // login - expired password update
             $response = $this->expiredPassword($request);
@@ -149,9 +149,9 @@ class Authentication extends \NDB_Page implements ETagCalculator
      *
      * @param ServerRequestInterface $request The incoming PSR7 request.
      *
-     * @return array
+     * @return ResponseInterface The outgoing PSR7 response
      */
-    function login(ServerRequestInterface $request) : array
+    function login(ServerRequestInterface $request) : ResponseInterface
     {
         // Parse POST request body.
         $values = json_decode((string) $request->getBody(), true);
@@ -169,20 +169,25 @@ class Authentication extends \NDB_Page implements ETagCalculator
             $_SESSION['State']->setProperty('login', $login);
             $login->setState();
         } else {
-            // login failed.
-            $values['error'] = $login->_lastError;
+            // login error.
+            return new \LORIS\Http\Response\JSON\Conflict(
+                (string) $login->_lastError
+            );
+        }
+        // Check if password expired.
+        if (isset($_SESSION['PasswordExpiredForUser'])) {
+            return new \LORIS\Http\Response\JSON\Conflict(
+                'password expired'
+            );
         }
 
         // wipe the old data.
         unset($values['username']);
         unset($values['password']);
 
-        if (isset($_SESSION['PasswordExpiredForUser'])) {
-            $values['expired'] = true;
-            $values['error']   = 'Password expired for user.';
-        }
-
-        return $values;
+        return new \LORIS\Http\Response\JsonResponse(
+            $values
+        );
     }
 
     /**
