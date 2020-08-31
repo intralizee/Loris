@@ -51,13 +51,15 @@ class Signup extends \NDB_Page implements ETagCalculator
         // Parse POST request body.
         $values = json_decode((string) $request->getBody(), true);
 
-        if (!isset($values['command']) || $values['command'] !== 'request') {
-            return new \LORIS\Http\Response\JSON\BadRequest(
-                'Error'
-            );
+        if (isset($values['command'])
+            && $values['command'] === 'request'
+        ) {
+            // account request by user.
+            return $this->requestAccount($request);
         }
-        // request - account request by user.
-        return $this->requestAccount($request);
+        return new \LORIS\Http\Response\JSON\BadRequest(
+            'Error'
+        );
     }
 
     /**

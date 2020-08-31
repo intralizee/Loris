@@ -51,13 +51,16 @@ class Reset extends \NDB_Page implements ETagCalculator
         // Parse POST request body.
         $values = json_decode((string) $request->getBody(), true);
 
-        if (!isset($values['command']) || $values['command'] !== 'reset') {
-            return new \LORIS\Http\Response\JSON\BadRequest(
-                'Error'
-            );
+        if (isset($values['command'])
+            && $values['command'] === 'reset'
+        ) {
+            // password reset request by user.
+            return $this->resetPassword($request);
         }
-        // reset - password reset request by user.
-        return $this->resetPassword($request);
+
+        return new \LORIS\Http\Response\JSON\BadRequest(
+            'Error'
+        );
     }
 
     /**
