@@ -58,7 +58,7 @@ class PasswordExpired extends Component {
 
     const state = JSON.parse(JSON.stringify(this.state));
     fetch(
-      window.location.origin + '/login/Authentication', {
+      window.location.origin + '/login/Expired', {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
@@ -72,17 +72,22 @@ class PasswordExpired extends Component {
           confirm: state.form.value.confirm,
         }),
       })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          // error - message.
-          const state = JSON.parse(JSON.stringify(this.state));
-          state.form.error.toggle = true;
-          state.form.error.message = data.error;
-          this.setState(state);
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            // success - refresh page and user is logged in.
+            window.location.href = window.location.origin;
+          });
         } else {
-          // success - refresh page and user is logged in.
-          window.location.href = window.location.origin;
+          response.json().then((data) => {
+            if (data.error) {
+              // error - message.
+              const state = JSON.parse(JSON.stringify(this.state));
+              state.form.error.toggle = true;
+              state.form.error.message = data.error;
+              this.setState(state);
+            }
+          });
         }
       })
       .catch((error) => {

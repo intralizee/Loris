@@ -70,25 +70,16 @@ class Authentication extends \NDB_Page implements ETagCalculator
     {
         // Parse POST request body.
         $values   = json_decode((string) $request->getBody(), true);
-        $response = [];
 
-        if (!isset($values['command'])
-            || ($values['command'] !== 'login'
-            && $values['command'] !== 'expired')
+        if (isset($values['command'])
+            && $values['command'] === 'login'
         ) {
-            return new \LORIS\Http\Response\JSON\BadRequest(
-                'Error'
-            );
-        } else if ($values['command'] === 'login') {
-            // login - user attempting to login.
+            // user attempting to login.
             return $this->login($request);
-        } else if ($values['command'] === 'expired') {
-            // login - expired password update
-            $response = $this->expiredPassword($request);
         }
 
-        return new \LORIS\Http\Response\JsonResponse(
-            $response
+        return new \LORIS\Http\Response\JSON\BadRequest(
+            'Error'
         );
     }
 
@@ -188,46 +179,6 @@ class Authentication extends \NDB_Page implements ETagCalculator
         return new \LORIS\Http\Response\JsonResponse(
             $values
         );
-    }
-
-    /**
-     * Expired password update.
-     *
-     * @param ServerRequestInterface $request The incoming PSR7 request.
-     *
-     * @return array
-     */
-    function expiredPassword(ServerRequestInterface $request) : array
-    {
-        // Parse POST request body.
-        $values = json_decode((string) $request->getBody(), true);
-
-        // Check if password is not empty.
-        if (empty($values['password']) || empty($values['confirm'])) {
-            $values['error'] = 'Can not use an empty password';
-            return $values;
-        }
-        // Update the user password.
-        if (isset($_SESSION['PasswordExpiredForUser'])) {
-            $user      = \User::factory($_SESSION['PasswordExpiredForUser']);
-            $plaintext = htmlspecialchars_decode($values['password']);
-            // Check if new password is same as old password.
-            if (!$user->isPasswordDifferent($plaintext)) {
-                $values['error'] = 'You cannot keep the same password';
-                return $values;
-            }
-            // Update password
-            $user->updatePassword(
-                new \Password(
-                    $plaintext
-                )
-            );
-            unset($_SESSION['PasswordExpiredForUser']);
-            $values['status'] = 'success';
-        } else {
-            $values['error'] = 'Server encountered an error.';
-        }
-        return $values;
     }
 
     /**
