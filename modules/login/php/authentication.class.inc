@@ -69,7 +69,7 @@ class Authentication extends \NDB_Page implements ETagCalculator
     private function _handlePOST(ServerRequestInterface $request) : ResponseInterface
     {
         // Parse POST request body.
-        $values   = json_decode((string) $request->getBody(), true);
+        $values = json_decode((string) $request->getBody(), true);
 
         if (isset($values['command'])
             && $values['command'] === 'login'

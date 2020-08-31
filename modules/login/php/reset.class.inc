@@ -120,7 +120,7 @@ class Reset extends \NDB_Page implements ETagCalculator
                         . ' attempted to reset password for ' . $username
                     );
                     return new \LORIS\Http\Response\JSON\Conflict(
-                    'Sending reset email failed.'
+                        'Sending reset email failed.'
                     );
                 }
             } catch (\LorisException $e) {

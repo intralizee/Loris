@@ -88,7 +88,7 @@ class Expired extends \NDB_Page implements ETagCalculator
             // Check if new password is same as old password.
             if (!$user->isPasswordDifferent($plaintext)) {
                 return new \LORIS\Http\Response\JSON\Conflict(
-                'You cannot keep the same password.'
+                    'You cannot keep the same password.'
                 );
             }
             // Update password
