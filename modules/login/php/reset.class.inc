@@ -57,12 +57,7 @@ class Reset extends \NDB_Page implements ETagCalculator
             );
         }
         // reset - password reset request by user.
-        $response           = $this->resetPassword($request);
-        $response['status'] = 'success';
-
-        return new \LORIS\Http\Response\JsonResponse(
-            $response
-        );
+        return $this->resetPassword($request);
     }
 
     /**
@@ -70,9 +65,9 @@ class Reset extends \NDB_Page implements ETagCalculator
      *
      * @param ServerRequestInterface $request The incoming PSR7 request.
      *
-     * @return array
+     * @return ResponseInterface The outgoing PSR7 response
      */
-    function resetPassword(ServerRequestInterface $request) : array
+    function resetPassword(ServerRequestInterface $request) : ResponseInterface
     {
         // Parse POST request body.
         $values = json_decode((string) $request->getBody(), true);
@@ -89,8 +84,9 @@ class Reset extends \NDB_Page implements ETagCalculator
         if ($user->userID) {
             $email = $user->getData('Email');
             if (empty($email)) {
-                $values['error'] = 'Not a valid user';
-                return $values;
+                return new \LORIS\Http\Response\JSON\Conflict(
+                    'Not a valid user'
+                );
             }
 
             try {
@@ -115,19 +111,25 @@ class Reset extends \NDB_Page implements ETagCalculator
                     $msg_data['password'] = $password;
                     \Email::send($email, 'lost_password.tpl', $msg_data);
                 } else {
-                    $values['error'] = 'Sending reset email failed.';
                     error_log(
                         $_SERVER['REMOTE_ADDR']
                         . '(' . $_SERVER['HTTP_X_FORWARDED_FOR'] . ')'
                         . ' attempted to reset password for ' . $username
                     );
+                    return new \LORIS\Http\Response\JSON\Conflict(
+                    'Sending reset email failed.'
+                    );
                 }
             } catch (\LorisException $e) {
                 error_log($e->getMessage());
-                $values['error'] = 'Sending reset email failed.';
+                return new \LORIS\Http\Response\JSON\Conflict(
+                    'Sending reset email failed.'
+                );
             }
         }
-        return $values;
+        return new \LORIS\Http\Response\JsonResponse(
+            $values
+        );
     }
 
     /**

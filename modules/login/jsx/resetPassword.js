@@ -64,9 +64,18 @@ class ResetPassword extends Component {
           username: state.form.value.username,
         }),
       })
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({reset: true});
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            this.setState({reset: true});
+          });
+        } else {
+          response.json().then((data) => {
+            if (data.error) {
+              this.setState({reset: true});
+            }
+          });
+        }
       })
       .catch((error) => {
         console.error(error);
