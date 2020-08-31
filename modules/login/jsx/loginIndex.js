@@ -129,15 +129,11 @@ class Login extends Component {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            console.log(1);
-            console.log(data);
             // success - refresh page and user is logged in.
             window.location.href = window.location.origin;
           });
         } else {
-          console.log(2);
           response.json().then((data) => {
-            console.log(data);
             if (data.error) {
               const state = JSON.parse(JSON.stringify(this.state));
               if (data.error === 'password expired') {
