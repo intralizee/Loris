@@ -194,6 +194,7 @@ class Login extends Component {
                  alt={this.state.study.title}/>
           </section>
           <FormElement
+            name={'loginIndex'}
             action={''}
             fileUpload={'false'}
             onSubmit={this.handleSubmit}

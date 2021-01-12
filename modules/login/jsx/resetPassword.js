@@ -90,7 +90,7 @@ class ResetPassword extends Component {
     const reset = !this.state.reset ? (
       <div>
         <FormElement
-          name={'reset'}
+          name={'resetPassword'}
           action={''}
           id={'form'}
           fileUpload={'false'}

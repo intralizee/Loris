@@ -119,7 +119,7 @@ class PasswordExpired extends Component {
           <p>We suggest using a password manager to generate one for you.</p>
         </div>
         <FormElement
-          name={'form1'}
+          name={'passwordExpiry'}
           action={''}
           id={'form'}
           fileUpload={'false'}

@@ -146,7 +146,7 @@ class RequestAccount extends Component {
     const request = !this.state.request ? (
       <div>
         <FormElement
-          name={'form1'}
+          name={'requestAccount'}
           action={''}
           id={'form'}
           fileUpload={'false'}
