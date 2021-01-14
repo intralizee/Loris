@@ -151,7 +151,7 @@ class Authentication extends \NDB_Page implements ETagCalculator
         $success = $login->passwordAuthenticate(
             $values['username'],
             $values['password'],
-            false
+            false,
         );
         if ($success) {
             // login success.
@@ -159,16 +159,14 @@ class Authentication extends \NDB_Page implements ETagCalculator
             $_SESSION['State'] =& State::singleton();
             $_SESSION['State']->setProperty('login', $login);
             $login->setState();
+        } else if ($login->passwordChangeRequired()) {
+            return new \LORIS\Http\Response\JSON\Conflict(
+                'password expired'
+            );
         } else {
             // login error.
             return new \LORIS\Http\Response\JSON\Conflict(
                 (string) $login->_lastError
-            );
-        }
-        // Check if password expired.
-        if (isset($_SESSION['PasswordExpiredForUser'])) {
-            return new \LORIS\Http\Response\JSON\Conflict(
-                'password expired'
             );
         }
 
