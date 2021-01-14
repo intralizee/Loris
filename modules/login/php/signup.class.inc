@@ -112,7 +112,7 @@ class Signup extends \NDB_Page implements ETagCalculator
 
         // Check email address' uniqueness
         $result = $DB->pselectOne(
-            "SELECT COUNT(*) FROM users WHERE Email = :VEmail",
+            "SELECT COUNT(*) FROM users WHERE Email=:VEmail OR UserID=:VEmail",
             ['VEmail' => $from]
         );
 
