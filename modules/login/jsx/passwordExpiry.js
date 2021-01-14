@@ -125,22 +125,20 @@ class PasswordExpired extends Component {
           fileUpload={'false'}
           onSubmit={this.handleSubmit}
         >
-          <TextboxElement
+          <PasswordElement
             name={'password'}
             value={this.state.form.value.password}
             onUserInput={this.setForm}
             class={'col-sm-12'}
             required={true}
-            type={'password'}
             placeholder={'New Password'}
           />
-          <TextboxElement
+          <PasswordElement
             name={'confirm'}
             value={this.state.form.value.confirm}
             onUserInput={this.setForm}
             class={'col-sm-12'}
             required={true}
-            type={'password'}
             placeholder={'Confirm Password'}
           />
           {error}
