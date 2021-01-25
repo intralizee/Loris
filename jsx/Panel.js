@@ -96,6 +96,9 @@ Panel.propTypes = {
   id: PropTypes.string,
   height: PropTypes.string,
   title: PropTypes.string,
+  panelSize: PropTypes.string,
+  style: PropTypes.object,
+  children: PropTypes.array,
 };
 Panel.defaultProps = {
   initCollapsed: false,
