@@ -369,10 +369,8 @@ class SearchableDropdown extends Component {
     let newOptions = {};
     let optionList = [];
     if (sortByValue) {
-      for (let key in options) {
-        if (Object.prototype.hasOwnProperty.call(options, key)) {
-          newOptions[options[key]] = key;
-        }
+      for (const [key] of Object.entries(options)) {
+        newOptions[options[key]] = key;
       }
       optionList = Object.keys(newOptions).sort().map(function(option) {
         return (
