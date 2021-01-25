@@ -556,10 +556,8 @@ class SelectElement extends Component {
     let newOptions = {};
     let optionList = [];
     if (sortByValue) {
-      for (let key in options) {
-        if (Object.prototype.hasOwnProperty.call(options, key)) {
-          newOptions[options[key]] = key;
-        }
+      for (const [key] of Object.entries(options)) {
+        newOptions[options[key]] = key;
       }
       optionList = Object.keys(newOptions).sort().map(function(option) {
         return (
@@ -2154,33 +2152,31 @@ class RadioElement extends React.Component {
     };
 
     let content = [];
-    for (const key in this.props.options) {
-      if (Object.prototype.hasOwnProperty.call(this.props.options, key)) {
-        const checked = this.props.checked === key;
-        content.push(
-          <div key={key}
-               style={styleColumn}>
-            <div style={styleContainer}>
-              <input
-                type='radio'
-                name={this.props.name}
-                value={key}
-                id={key}
-                checked={checked}
-                required={required}
-                disabled={disabled}
-                onChange={this.handleChange}
-                style={styleInput}
-              />
-              <label htmlFor={key}
-                     style={styleLabel}
-              >
-                {this.props.options[key]}
-              </label>
-            </div>
+    for (const [key] of Object.entries(his.props.options)) {
+      const checked = this.props.checked === key;
+      content.push(
+        <div key={key}
+             style={styleColumn}>
+          <div style={styleContainer}>
+            <input
+              type='radio'
+              name={this.props.name}
+              value={key}
+              id={key}
+              checked={checked}
+              required={required}
+              disabled={disabled}
+              onChange={this.handleChange}
+              style={styleInput}
+            />
+            <label htmlFor={key}
+                   style={styleLabel}
+            >
+              {this.props.options[key]}
+            </label>
           </div>
-        );
-      }
+        </div>
+      );
     }
 
     layout.push(
