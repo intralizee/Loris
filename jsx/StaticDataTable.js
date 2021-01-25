@@ -190,7 +190,7 @@ class StaticDataTable extends Component {
     });
 
     const correctReactLinks = (csvData) => {
-      for (const index of csvData) {
+      for (const index in csvData) {
         if (Object.prototype.hasOwnProperty.call(csvData, index)) {
           for (const indexChild in csvData[index]) {
             if (Object.prototype.hasOwnProperty.call(csvData[index], indexChild)
