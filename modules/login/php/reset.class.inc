@@ -101,7 +101,8 @@ class Reset extends \NDB_Page implements ETagCalculator
                     // Reset the password in the database and
                     // expire password so user must change it upon login.
                     $user->updatePassword(
-                        new \Password($password)
+                        new \Password($password),
+                        true
                     );
 
                     // send the user an email
