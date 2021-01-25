@@ -370,7 +370,7 @@ class SearchableDropdown extends Component {
     let optionList = [];
     if (sortByValue) {
       for (let key in options) {
-        if (options.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(options, key)) {
           newOptions[options[key]] = key;
         }
       }
@@ -559,7 +559,7 @@ class SelectElement extends Component {
     let optionList = [];
     if (sortByValue) {
       for (let key in options) {
-        if (options.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(options, key)) {
           newOptions[options[key]] = key;
         }
       }
@@ -2157,7 +2157,7 @@ class RadioElement extends React.Component {
 
     let content = [];
     for (const key in this.props.options) {
-      if (this.props.options.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(this.props.options, key)) {
         const checked = this.props.checked === key;
         content.push(
           <div key={key}
