@@ -127,6 +127,8 @@ class DataQueryApp extends Component {
 
     // Load the save queries' details
     let promises = [];
+    console.log('this.state.queryIDs is ');
+    console.log(typeof this.state.queryIDs);
     for (const [key] of Object.entries(this.state.queryIDs)) {
       for (let i = 0; i < this.state.queryIDs[key].length; i += 1) {
         let curRequest;
@@ -454,13 +456,15 @@ class DataQueryApp extends Component {
           selectedFields[fieldSplit[0]] = {};
           selectedFields[fieldSplit[0]][fieldSplit[1]] = {};
           selectedFields[fieldSplit[0]].allVisits = {};
-          for (const key of this.props.Visits) {
+          console.log('this.props.Visits is');
+          console.log(typeof this.props.Visits);
+          for (const [key] of Object.entries(this.props.Visits)) {
             selectedFields[fieldSplit[0]].allVisits[key] = 1;
             selectedFields[fieldSplit[0]][fieldSplit[1]][key] = [key];
           }
         } else {
           selectedFields[fieldSplit[0]][fieldSplit[1]] = {};
-          for (const key of this.props.Visits) {
+          for (const [key] of Object.entries(this.props.Visits)) {
             selectedFields[fieldSplit[0]].allVisits[key]++;
             selectedFields[fieldSplit[0]][fieldSplit[1]][key] = [key];
           }
@@ -470,8 +474,10 @@ class DataQueryApp extends Component {
       // Query was saved in the new format
       filterState = criteria;
       selectedFields = fields ? fields : {};
+      console.log('fields is ');
+      console.log(typeof fields);
       for (const [instrument] of Object.entries(fields)) {
-        for (let field in fields[instrument]) {
+        for (const [field] in Object.entries(fields[instrument])) {
           if (field !== 'allVisits') {
             fieldsList.push(instrument + ',' + field);
           }
@@ -572,6 +578,8 @@ class DataQueryApp extends Component {
         );
         // Add all visits to the given category, initializing their counts to 1
         selectedFields[category].allVisits = {};
+        console.log('this.props.Visits is ');
+        console.log(typeof this.props.Visits);
         for (const [key] of Object.entries(this.props.Visits)) {
           selectedFields[category].allVisits[key] = 1;
         }
@@ -585,6 +593,8 @@ class DataQueryApp extends Component {
         }
       } else if (selectedFields[category][fieldName]) {
         // Remove the field from the selectedFields
+        console.log('selectedFields[category][fieldName] is ');
+        console.log(typeof selectedFields[category][fieldName]);
         for (
           const [key] of Object.entries(selectedFields[category][fieldName])
           ) {
@@ -698,7 +708,9 @@ class DataQueryApp extends Component {
               sessionInfo.push(this.state.filter.session[j]);
             }
           } else {
-            for (const key of this.state.selectedFields[category].allVisits) {
+            for (const [key] of Object.entries(
+                this.state.selectedFields[category].allVisits
+            )) {
               let temp = [];
               temp.push(this.state.filter.session[j]);
               // Add the visit to the temp variable then add to the sessions to be queried
@@ -843,7 +855,7 @@ class DataQueryApp extends Component {
       // Loop through the desired fields, adding a row header for each visit if it
       // has been selected in the build phase
       for (i = 0; fields && i < fields.length; i += 1) {
-        for (visit of Visits) {
+        for (const [visit] of Object.entries(Visits)) {
           temp = fields[i].split(',');
           instrument = this.state.selectedFields[temp[0]];
           if (instrument
