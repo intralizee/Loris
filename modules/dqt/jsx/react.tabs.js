@@ -459,10 +459,7 @@ class ViewDataTabPane extends Component {
       </>
     );
     let criteria = [];
-    for (let el in this.props.Criteria) {
-      if (!this.props.Criteria.hasOwnProperty(el)) {
-        continue;
-      }
+    for (const [el] of Object.entries(this.props.Criteria)) {
       let item = this.props.Criteria[el];
       if (item === undefined) {
         criteria.push(
@@ -670,30 +667,28 @@ class ScatterplotGraph extends Component {
       max = minmax[1];
       i = 0;
 
-      for (dataset in groupedPoints) {
-        if (groupedPoints.hasOwnProperty(dataset)) {
-          // let label = document.getElementById(
-          //   'scatter-group'
-          // ).selectedOptions.item(0).textContent
-          //   + ' = ' + dataset;
-          plots.push({
-            color: i,
-            label: dataset,
-            data: groupedPoints[dataset],
-            points: {show: true},
-          });
-          LS = this.lsFit(groupedPoints[dataset]);
-          // LS = lsFit(groupedPoints[dataset].convertNumbers());
-          slope = LS[1];
-          start = LS[0];
-          plots.push({
-            color: i,
-            // label: "LS Fit for " + dataset,
-            data: jStat.seq(min, max, 3, plotY),
-            lines: {show: true},
-          });
-          i += 1;
-        }
+      for (const [dataset] of Object.entries(groupedPoints)) {
+        // let label = document.getElementById(
+        //   'scatter-group'
+        // ).selectedOptions.item(0).textContent
+        //   + ' = ' + dataset;
+        plots.push({
+          color: i,
+          label: dataset,
+          data: groupedPoints[dataset],
+          points: {show: true},
+        });
+        LS = this.lsFit(groupedPoints[dataset]);
+        // LS = lsFit(groupedPoints[dataset].convertNumbers());
+        slope = LS[1];
+        start = LS[0];
+        plots.push({
+          color: i,
+          // label: "LS Fit for " + dataset,
+          data: jStat.seq(min, max, 3, plotY),
+          lines: {show: true},
+        });
+        i += 1;
       }
       $.plot('#scatterplotdiv', plots, {});
     }
@@ -1083,16 +1078,13 @@ class ManageSavedQueryRow extends Component {
         fields.push(<li key={i}>{this.props.Query.Fields[i]}</li>);
       }
     } else if (this.props.Query.Fields) {
-      for (let instrument in this.props.Query.Fields) {
-        if (this.props.Query.Fields.hasOwnProperty(instrument)) {
-          for (let field in this.props.Query.Fields[instrument]) {
-            if (this.props.Query.Fields[instrument].hasOwnProperty(field)
-              && field !== 'allVisits'
-            ) {
-              fields.push(
-                <li key={instrument + field}>{instrument},{field}</li>
-              );
-            }
+      for (const instrument of this.props.Query.Fields) {
+        for (let field in this.props.Query.Fields[instrument]) {
+          if (field !== 'allVisits'
+          ) {
+            fields.push(
+              <li key={instrument + field}>{instrument},{field}</li>
+            );
           }
         }
       }
