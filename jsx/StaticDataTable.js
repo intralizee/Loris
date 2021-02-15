@@ -190,8 +190,8 @@ class StaticDataTable extends Component {
     });
 
     const correctReactLinks = (csvData) => {
-      for (const [index] of csvData.entries()) {
-        for (const [indexChild] of csvData[index].entries()) {
+      for (const [index] of Object.entries(csvData)) {
+        for (const [indexChild] of Object.entries(csvData[index])) {
           if (csvData[index][indexChild] == null) {
             csvData[index][indexChild] = [''];
           } else if (csvData[index][indexChild].type === 'a') {

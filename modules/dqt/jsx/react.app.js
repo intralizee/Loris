@@ -127,7 +127,7 @@ class DataQueryApp extends Component {
 
     // Load the save queries' details
     let promises = [];
-    for (const key of this.state.queryIDs) {
+    for (const [key] of Object.entries(this.state.queryIDs)) {
       for (let i = 0; i < this.state.queryIDs[key].length; i += 1) {
         let curRequest;
         curRequest = Promise.resolve(
@@ -572,7 +572,7 @@ class DataQueryApp extends Component {
         );
         // Add all visits to the given category, initializing their counts to 1
         selectedFields[category].allVisits = {};
-        for (const key of this.props.Visits) {
+        for (const [key] of Object.entries(this.props.Visits)) {
           selectedFields[category].allVisits[key] = 1;
         }
 
@@ -585,7 +585,9 @@ class DataQueryApp extends Component {
         }
       } else if (selectedFields[category][fieldName]) {
         // Remove the field from the selectedFields
-        for (const key of selectedFields[category][fieldName]) {
+        for (
+          const [key] of Object.entries(selectedFields[category][fieldName])
+          ) {
           // Decrement the count of field's visits, delete visit if count is 1
           if (selectedFields[category].allVisits[key] === 1) {
             delete selectedFields[category].allVisits[key];
@@ -616,7 +618,9 @@ class DataQueryApp extends Component {
         }
 
         // Increment the visit count for the visit, setting it to 1 if doesn't exist
-        for (const key of selectedFields[category].allVisits) {
+        for (
+          const [key] of Object.entries(selectedFields[category].allVisits)
+          ) {
           if (key === 'allVisits') {
             continue;
           }

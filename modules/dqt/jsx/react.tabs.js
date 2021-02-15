@@ -1078,8 +1078,10 @@ class ManageSavedQueryRow extends Component {
         fields.push(<li key={i}>{this.props.Query.Fields[i]}</li>);
       }
     } else if (this.props.Query.Fields) {
-      for (const instrument of this.props.Query.Fields) {
-        for (let field in this.props.Query.Fields[instrument]) {
+      for (const [instrument] of Object.entries(this.props.Query.Fields)) {
+        for (
+          const [field] of Object.entries(this.props.Query.Fields[instrument])
+          ) {
           if (field !== 'allVisits'
           ) {
             fields.push(
