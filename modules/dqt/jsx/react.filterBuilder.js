@@ -299,7 +299,9 @@ class FilterRule extends Component {
         // Only display operators if field is selected
         inputType = this.props.rule.fieldType.split('(');
         operatorKey = inputType[0];
-        for (let key of this.state.operators) {
+        console.log('this.state.operators is ');
+        console.log(typeof this.state.operators);
+        for (const [key] of Object.entries(this.state.operators)) {
           operators.push(
             <option key={key} value={key} onChange={this.operatorSelect}>
               {this.state.operators[key]}

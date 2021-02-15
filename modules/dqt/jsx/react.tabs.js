@@ -459,6 +459,8 @@ class ViewDataTabPane extends Component {
       </>
     );
     let criteria = [];
+    console.log('this.props.Criteria is ');
+    console.log(typeof this.props.Criteria);
     for (const [el] of Object.entries(this.props.Criteria)) {
       let item = this.props.Criteria[el];
       if (item === undefined) {
@@ -667,6 +669,8 @@ class ScatterplotGraph extends Component {
       max = minmax[1];
       i = 0;
 
+      console.log('groupedPoints is ');
+      console.log(typeof groupedPoints);
       for (const [dataset] of Object.entries(groupedPoints)) {
         // let label = document.getElementById(
         //   'scatter-group'
@@ -1078,7 +1082,11 @@ class ManageSavedQueryRow extends Component {
         fields.push(<li key={i}>{this.props.Query.Fields[i]}</li>);
       }
     } else if (this.props.Query.Fields) {
+      console.log('this.props.Query.Fields is ');
+      console.log(typeof this.props.Query.Fields);
       for (const [instrument] of Object.entries(this.props.Query.Fields)) {
+        console.log('this.props.Query.Fields[instrument] is ');
+        console.log(typeof this.props.Query.Fields[instrument]);
         for (
           const [field] of Object.entries(this.props.Query.Fields[instrument])
           ) {
