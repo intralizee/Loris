@@ -204,6 +204,7 @@ class UserTest extends TestCase
      * @var User object
      */
     private $_otherUser;
+
     /**
      * NDB_Factory used in tests.
      * Test doubles are injected to the factory object.
@@ -217,6 +218,7 @@ class UserTest extends TestCase
      * @var \NDB_Config | PHPUnit\Framework\MockObject\MockObject
      */
     private $_configMock;
+    private $_mockConfig;
     /**
      * Test double for Database object
      *
@@ -568,7 +570,7 @@ class UserTest extends TestCase
     public function testHasProjectWhenTrue()
     {
         $this->_user = \User::factory(self::USERNAME);
-        $this->assertTrue($this->_user->hasProject(3));
+        $this->assertTrue($this->_user->hasProject(new \ProjectID("3")));
     }
 
     /**
@@ -580,7 +582,7 @@ class UserTest extends TestCase
     public function testHasProjectWhenFalse()
     {
         $this->_user = \User::factory(self::USERNAME);
-        $this->assertFalse($this->_user->hasProject(5));
+        $this->assertFalse($this->_user->hasProject(new \ProjectID("5")));
     }
 
     /**

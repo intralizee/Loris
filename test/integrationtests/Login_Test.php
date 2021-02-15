@@ -62,6 +62,7 @@ class LorisLoginTest extends LorisIntegrationTest
         $login->click();
         $bodyText = $this->safeFindElement(
             WebDriverBy::cssSelector('h3[class="welcome"]')
+
         )->getText();
         $this->assertStringContainsString("Welcome", $bodyText);
     }

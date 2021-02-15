@@ -130,7 +130,7 @@ class Timepoint extends \NDB_Page implements ETagCalculator
         $projectOptions        = [];
         foreach ($user_list_of_projects as $projectID) {
             $project = \Project::getProjectFromID($projectID);
-            $projectOptions[$projectID] = $project->getName();
+            $projectOptions["$projectID"] = $project->getName();
         }
         $values['project'] = $projectOptions;
 
@@ -159,6 +159,11 @@ class Timepoint extends \NDB_Page implements ETagCalculator
     {
         // Parse POST request body.
         $values = json_decode((string) $request->getBody(), true);
+        if (!is_array($values)) {
+            return new \LORIS\Http\Response\JSON\BadRequest(
+                'Invalid request'
+            );
+        }
 
         if (!$this->_verifyCreatePermissions($request, $values['identifier'])) {
             return new \LORIS\Http\Response\JSON\Forbidden(
@@ -188,7 +193,7 @@ class Timepoint extends \NDB_Page implements ETagCalculator
             // if there is only one project, autoselect first project from array of 1
             $project = \Project::getProjectFromID(array_pop($user_list_of_projects));
         } else if (count($user_list_of_projects) > 1) {
-            $project_id = intval($values['project']);
+            $project_id = new \ProjectID($values['project']);
             $project    = \Project::getProjectFromID($project_id);
         }
 

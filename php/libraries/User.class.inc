@@ -100,7 +100,7 @@ class User extends UserPermissions implements \LORIS\StudyEntities\AccessibleRes
             ['uid' => $row['ID']]
         );
         foreach ($user_pid as $k=>$pid) {
-            $user_pid[$k] = intval($pid);
+            $user_pid[$k] = new ProjectID($pid);
         }
 
         // Get examiner information
@@ -311,7 +311,7 @@ class User extends UserPermissions implements \LORIS\StudyEntities\AccessibleRes
     /**
      * Get the user's sites' ID numbers
      *
-     * @return array
+     * @return ProjectID[]
      */
     function getProjectIDs(): array
     {
@@ -338,7 +338,7 @@ class User extends UserPermissions implements \LORIS\StudyEntities\AccessibleRes
     {
         $site_list = $this->userInfo['examiner'];
         unset($site_list['pending']);
-        natcasesort($site_list);
+        ksort($site_list);
         return $site_list;
     }
 
@@ -423,16 +423,15 @@ class User extends UserPermissions implements \LORIS\StudyEntities\AccessibleRes
     /**
      * Determines if the user has a project
      *
-     * @param int $projectID The project ID
+     * @param ProjectID $projectID The project ID
      *
      * @return bool
      */
-    public function hasProject(int $projectID) : bool
+    public function hasProject(ProjectID $projectID) : bool
     {
         return in_array(
             $projectID,
-            $this->getProjectIDs(),
-            true
+            $this->getProjectIDs()
         );
     }
 

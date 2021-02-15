@@ -25,18 +25,16 @@ class UserPermissions
     /**
      * User's ID
      *
-     * @var    string
-     * @access private
+     * @var ?string
      */
     var $userID;
 
     /**
      * Stores the permissions
      *
-     * @var    array<string,bool>
-     * @access private
+     * @var array<string,bool>
      */
-    var $permissions = [];
+    private $permissions = [];
 
 
     /**
@@ -54,10 +52,11 @@ class UserPermissions
         $query  = "SELECT ID FROM users WHERE UserID =:UName";
         $params = ['UName' => $username];
 
-        $this->userID = \Database::singleton()->pselectOne($query, $params);
-        if (empty($this->userID)) {
+        $userID = \Database::singleton()->pselectOne($query, $params);
+        if ($userID === null) {
             return false;
         }
+        $this->userID = $userID;
 
         // load the user's permissions
         $this->setPermissions();

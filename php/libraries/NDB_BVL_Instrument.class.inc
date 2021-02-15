@@ -1105,22 +1105,6 @@ abstract class NDB_BVL_Instrument extends NDB_Page
     abstract function getSubtestList(): array;
 
     /**
-     * Marks an element in the lorisform object as being required (for
-     * use with the requiredIf rule)
-     *
-     * @param string $elementName the element to add to the required list
-     *
-     * @return void
-     */
-    function setRequired(string $elementName): void
-    {
-        if (!in_array($elementName, $this->form->_required)) {
-            $this->form->_required[] = $elementName;
-        }
-    }
-
-
-    /**
      * Convert a lorisform date or timestamp into a database acceptable
      * (and storable) date or time
      *
@@ -2491,7 +2475,12 @@ abstract class NDB_BVL_Instrument extends NDB_Page
 
             $selectEl = $html->getElementsByTagName("select")->item(0);
 
-            if ($selectEl->getAttribute("multiple") == 'multiple') {
+            // getElementsByTagName returns DOMNodeList, but
+            // getAttribute only exists on the DOMElement type
+            // (which extends DOMNode)
+            if ($selectEl instanceof \DOMElement
+                && $selectEl->getAttribute("multiple") == 'multiple'
+            ) {
                 $element['Multiselect'] = true;
             }
 
@@ -2531,7 +2520,7 @@ abstract class NDB_BVL_Instrument extends NDB_Page
      * @return void (but side-effect modified $formArray to populate the element
      *         with the appropriate format needed for JSON serialization.)
      */
-    function _toJSONParsePageElement(array &$element, array &$formArray): void
+    function _toJSONParsePageElement(array $element, array &$formArray): void
     {
         $name = isset($element['name']) ? $element['name'] : '';
         if ($element['type'] === 'group') {
@@ -2621,8 +2610,6 @@ abstract class NDB_BVL_Instrument extends NDB_Page
                     foreach ($section['elements'] as &$element) {
                         $this->_toJSONParsePageElement($element, $section);
                     }
-                } else {
-                    $this->_toJSONParsePageElement($element, $section);
                 }
             }
         }
