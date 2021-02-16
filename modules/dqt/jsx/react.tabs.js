@@ -462,6 +462,9 @@ class ViewDataTabPane extends Component {
     console.log('this.props.Criteria is ');
     console.log(typeof this.props.Criteria);
     for (const [el] of Object.entries(this.props.Criteria)) {
+      if (this.props.Criteria[el] === undefined) {
+        continue;
+      }
       let item = this.props.Criteria[el];
       if (item === undefined) {
         criteria.push(

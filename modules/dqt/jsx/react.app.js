@@ -763,7 +763,7 @@ class DataQueryApp extends Component {
                  */
                 row = rows[i];
                 identifier = row.value;
-                if (!sessiondata[identifier]) {
+                if (sessiondata[identifier] === undefined) {
                   sessiondata[identifier] = {};
                 }
                 sessiondata[identifier][row.key[0]] = row.doc;
