@@ -280,11 +280,9 @@ class MediaUploadForm extends Component {
     // Set form data and upload the media file
     let formData = this.state.formData;
     let formObj = new FormData();
-    for (let key in formData) {
-      if (formData.hasOwnProperty(key)) {
-        if (formData[key] !== '') {
-          formObj.append(key, formData[key]);
-        }
+    for (const [key] of Object.entries(formData)) {
+      if (formData[key] !== '') {
+        formObj.append(key, formData[key]);
       }
     }
     $.ajax({
