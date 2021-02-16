@@ -443,7 +443,7 @@ class ViewDataTabPane extends Component {
     );
     let criteria = [];
     for (const [el] of Object.entries(this.props.Criteria)) {
-      if (!this.props.Criteria[el]) {
+      if (this.props.Criteria[el] === undefined) {
         continue;
       }
       let item = this.props.Criteria[el];
