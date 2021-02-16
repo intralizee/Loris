@@ -842,7 +842,6 @@ class DataQueryApp extends Component {
       let visit;
       let identifier;
       let temp;
-      let colHeader;
       let index;
       let instrument;
       let fieldSplit;

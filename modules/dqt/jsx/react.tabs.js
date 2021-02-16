@@ -629,7 +629,6 @@ class ScatterplotGraph extends Component {
       let plotY = (x) => {
         return [x, start + (slope * x)];
       };
-      let dataset;
 
     for (i = 0; i < data.length; i += 1) {
       points.push([data[i][xaxis], data[i][yaxis]]);
